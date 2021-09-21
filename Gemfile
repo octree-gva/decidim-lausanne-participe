@@ -12,7 +12,7 @@ gem "decidim-conferences", git: "https://github.com/decidim/decidim.git", branch
 
 gem "decidim-decidim_awesome", "~> 0.6.0"
 #gem "decidim-navbar_links", git: "https://github.com/OpenSourcePolitics/decidim-module-navbar_links.git", branch: "0.23-stable"
-gem "decidim-socio_demographic_authorization_handler", git: "https://github.com/OpenSourcePolitics/decidim-module-socio_demographic_authorization_handler.git", branch: "alt/decidim-lausa"
+gem "decidim-socio_demographic_authorization_handler", git: "https://github.com/OpenSourcePolitics/decidim-module-socio_demographic_authorization_handler.git", branch: "bump/0.23.6"
 gem "decidim-term_customizer", git: "https://github.com/mainio/decidim-module-term_customizer.git", branch: "0.23-stable"
 
 # gem "decidim-consultations", git: "https://github.com/decidim/decidim.git", branch: "0.21-stable"
@@ -27,14 +27,14 @@ gem "decidim-term_customizer", git: "https://github.com/mainio/decidim-module-te
 # gem "decidim-initiatives_no_signature_allowed", git: "https://github.com/OpenSourcePolitics/decidim-module-initiatives_nosignature_allowed.git"
 # gem "decidim-navigation_maps", git: "https://github.com/Platoniq/decidim-module-navigation_maps"
 
-gem "bootsnap", "~> 1.3"
+gem "bootsnap", "~> 1.4"
 
 gem "dotenv-rails"
 
-gem "puma", "~> 4.3"
+gem "puma", "~> 4.3.7"
 gem "uglifier", "~> 4.1"
 
-gem "faker", "~> 1.8"
+gem "faker", "~> 1.9"
 
 gem "ruby-progressbar"
 gem "sentry-raven"
