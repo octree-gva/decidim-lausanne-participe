@@ -10,6 +10,14 @@ Decidim.configure do |config|
   config.default_locale = :fr
   config.available_locales = [:en, :fr]
 
+  # Geocoder configuration
+  if !Rails.application.secrets.geocoder[:here_api_key].blank?
+    config.geocoder = {
+        static_map_url: "https://image.maps.ls.hereapi.com/mia/1.6/mapview",
+        here_api_key: Rails.application.secrets.geocoder[:here_api_key]
+    }
+  end
+
   # Restrict access to the system part with an authorized ip list.
   # You can use a single ip like ("1.2.3.4"), or an ip subnet like ("1.2.3.4/24")
   # You may specify multiple ip in an array ["1.2.3.4", "1.2.3.4/24"]
