@@ -4,6 +4,13 @@ en:
     decidim:
       footer:
         download_open_data: Open data
+        made_with_open_source:
+        | 
+          Website made by <a target="_blank" href="https://octree.ch">Octree</a> 
+          with <a target="_blank" href="https://github.com/decidim/decidim">
+            Decidim Open Source Software
+          </a>.
+
   socio_demographic_authorization:
     form:
       birthdate: Birthdate

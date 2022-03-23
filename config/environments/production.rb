@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.configure do
+  def env_enabled?(env_name, default_value="disabled")
+    ["true", "1", "enabled"].include? ENV.fetch(env_name, default_value)
+  end
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -19,16 +22,17 @@ Rails.application.configure do
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
   # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
   # config.require_master_key = true
+  config.require_master_key = env_enabled? "RAILS_REQUIRE_MASTER_KEY"
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+  config.public_file_server.enabled = env_enabled? "RAILS_SERVE_STATIC_FILES"
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = Uglifier.new(harmony: true)
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = true
+  config.assets.compile = false
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
@@ -48,7 +52,7 @@ Rails.application.configure do
   # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = env_enabled? "RAILS_FORCE_SSL"
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
@@ -58,16 +62,14 @@ Rails.application.configure do
   config.log_tags = [:request_id]
 
   # Use a different cache store in production.
-  config.cache_store = if ENV["MEMCACHEDCLOUD_SERVERS"].present?
-                         [:dalli_store, ENV["MEMCACHEDCLOUD_SERVERS"].split(","), {
-                           username: ENV["MEMCACHEDCLOUD_USERNAME"], password: ENV["MEMCACHEDCLOUD_PASSWORD"]
-                         }]
-                       else
-                         :mem_cache_store
-                       end
+  if ENV.fetch("RAILS_CACHE_MODE", "disabled") == "redis" && ENV["CACHE_REDIS_URL"].present?
+    config.cache_store = :redis_cache_store, { url: ENV.fetch('CACHE_REDIS_URL')}
+  end
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
-  config.active_job.queue_adapter = :sidekiq
+  if ENV.fetch("RAILS_JOB_MODE", "default") == "sidekiq" && ENV["JOB_REDIS_URL"].present?
+    config.active_job.queue_adapter = :sidekiq
+  end
   # see confguration for sidekiq in `config/sidekiq.yml`
   # config.active_job.queue_name_prefix = "development_app_#{Rails.env}"
 
@@ -88,28 +90,17 @@ Rails.application.configure do
   # config.action_mailer.delivery_method = :letter_opener_web
 
   config.action_mailer.delivery_method = :smtp
+
   config.action_mailer.smtp_settings = {
-    address: Rails.application.secrets.smtp_address,
-    port: Rails.application.secrets.smtp_port,
-    authentication: Rails.application.secrets.smtp_authentication,
-    user_name: Rails.application.secrets.smtp_username,
-    password: Rails.application.secrets.smtp_password,
-    domain: Rails.application.secrets.smtp_domain,
-    enable_starttls_auto: Rails.application.secrets.smtp_starttls_auto,
-    openssl_verify_mode: "none"
+    address: ENV.fetch("SMTP_ADDRESS", ""),
+    port: ENV.fetch("SMTP_PORT", "587"),
+    authentication: ENV.fetch("SMTP_AUTHENTICATION", "plain"),
+    user_name: ENV.fetch("SMTP_USERNAME", ""),
+    password: ENV.fetch("SMTP_PASSWORD", ""),
+    domain: ENV.fetch("SMTP_DOMAIN") { ENV.fetch("SMTP_ADDRESS", "") },
+    enable_starttls_auto: env_enabled?("SMTP_STARTTLS_AUTO", "enabled"),
+    openssl_verify_mode: ENV.fetch("SMTP_VERIFY_MODE", "none")
   }
-
-  if Rails.application.secrets.sendgrid
-    config.action_mailer.default_options = {
-      "X-SMTPAPI" => {
-        filters: {
-          clicktrack: { settings: { enable: 0 } },
-          opentrack: { settings: { enable: 0 } }
-        }
-      }.to_json
-    }
-  end
-
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 

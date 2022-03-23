@@ -3,18 +3,24 @@
 Decidim.configure do |config|
   config.skip_first_login_authorization = ENV["SKIP_FIRST_LOGIN_AUTHORIZATION"] ? ActiveRecord::Type::Boolean.new.cast(ENV["SKIP_FIRST_LOGIN_AUTHORIZATION"]) : true
 
-  config.application_name = "OSP Agora"
-  config.mailer_sender = "OSP Agora <ne-pas-repondre@opensourcepolitics.eu>"
+  config.application_name = "Lausanne Participe"
+  config.mailer_sender = "Lausanne Participe <hello@voca.city>"
 
   # Change these lines to set your preferred locales
   config.default_locale = :fr
   config.available_locales = [:en, :fr]
 
   # Geocoder configuration
-  if !Rails.application.secrets.geocoder[:here_api_key].blank?
+  unless ENV.fetch("GEO_HERE_API", "").blank?
     config.geocoder = {
         static_map_url: "https://image.maps.ls.hereapi.com/mia/1.6/mapview",
-        here_api_key: Rails.application.secrets.geocoder[:here_api_key]
+        here_api_key: ENV.fetch("GEO_HERE_API"),
+        # geocoding service request timeout, in seconds (default 3):
+        timeout: 5,
+        # set default units to kilometers:
+        units: :km,
+        # caching (see https://github.com/alexreisner/geocoder#caching for details):
+        cache_prefix: "geo"
     }
   end
 
@@ -78,24 +84,10 @@ Decidim.configure do |config|
   #   api_key: Rails.application.secrets.maps[:api_key],
   #   dynamic: {
   #     provider: :here,
-  #     api_key: Rails.application.secrets.maps[:here_api_key]
+  #     api_key: ENV.fetch("GEOCODER_LOOKUP_API_KEY"], "")
   #   },
   #   static: { url: "https://staticmap.example.org/" },
   #   geocoding: { host: "nominatim.example.org", use_https: true }
-  # }
-
-  # Geocoder configurations if you want to customize the default geocoding
-  # settings. The maps configuration will manage which geocoding service to use,
-  # so that does not need any additional configuration here. Use this only for
-  # the global geocoder preferences.
-  # config.geocoder = {
-  #   # geocoding service request timeout, in seconds (default 3):
-  #   timeout: 5,
-  #   # set default units to kilometers:
-  #   units: :km,
-  #   # caching (see https://github.com/alexreisner/geocoder#caching for details):
-  #   cache: Redis.new,
-  #   cache_prefix: "..."
   # }
 
   # Custom resource reference generator method. Check the docs for more info.
@@ -109,7 +101,7 @@ Decidim.configure do |config|
 
   # Defines the quality of image uploads after processing. Image uploads are
   # processed by Decidim, this value helps reduce the size of the files.
-  # config.image_uploader_quality = 80
+  config.image_uploader_quality = 100
 
   # The number of reports which a resource can receive before hiding it
   # config.max_reports_before_hiding = 3
@@ -257,7 +249,7 @@ Decidim.configure do |config|
   # }
 
   # Sets Decidim::Exporters::CSV's default column separator
-  # config.default_csv_col_sep = ";"
+  config.default_csv_col_sep = ";"
 
   # The list of roles a user can have, not considering the space-specific roles.
   # config.user_roles = %w(admin user_manager)

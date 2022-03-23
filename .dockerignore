@@ -6,3 +6,5 @@ spec
 tmp/*
 .rspec-failures
 public/uploads
+.github
+*.md
