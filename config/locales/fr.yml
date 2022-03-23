@@ -29,6 +29,12 @@ fr:
     decidim:
       footer:
         download_open_data: Données ouvertes
+        made_with_open_source:
+        | 
+          Site réalisé par <a target="_blank" href="https://octree.ch">Octree</a> 
+          grâce au <a target="_blank" href="https://github.com/decidim/decidim">
+            logiciel libre Decidim
+          </a>.
   socio_demographic_authorization:
     form:
       birthdate: Date de naissance

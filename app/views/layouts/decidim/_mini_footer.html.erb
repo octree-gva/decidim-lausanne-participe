@@ -1,3 +1,8 @@
+<% unless ENV.fetch("OCTREE_FLAG", "").blank? %>
+<div style="position: fixed; background: red; transform: rotate(-3deg); padding: 8px; display: bloc; top: 0; left: 0; color: white; font-size: 20px">
+  <%= ENV.fetch("OCTREE_FLAG") %>
+</div>
+<% end %>
 <div class="mini-footer">
   <div class="row">
     <div class="decidim-logo">
