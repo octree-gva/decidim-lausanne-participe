@@ -28,6 +28,7 @@ services:
     image: postgres:14
     volumes:
       - pg-data:/var/lib/postgresql/data
+      - ./.dump/dump_2204.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - POSTGRES_PASSWORD=DEV-zae5Tu8thay8Eerah8Shu6iemuung2oo
       - POSTGRES_USER=decidim

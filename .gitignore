@@ -27,3 +27,5 @@ public/assets
 .rspec-failures
 
 .env
+vendor
+.vscode
