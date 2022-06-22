@@ -104,18 +104,6 @@ Rails.application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  config.lograge.enabled = true
-  config.lograge.formatter = Lograge::Formatters::Json.new
-  config.lograge.custom_options = lambda do |event|
-    {
-      remote_ip: event.payload[:remote_ip],
-      params: event.payload[:params].except("controller", "action", "format", "utf8"),
-      user_id: event.payload[:user_id],
-      organization_id: event.payload[:organization_id],
-      referer: event.payload[:referer]
-    }
-  end
-
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
