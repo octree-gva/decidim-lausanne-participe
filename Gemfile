@@ -10,13 +10,14 @@ gem "decidim-conferences", git: "https://github.com/decidim/decidim.git", branch
 gem "decidim-decidim_awesome", "~> 0.7.2"
 gem "decidim-socio_demographic_authorization_handler", git: "https://github.com/octree-gva/decidim-module-socio_demographic_authorization_handler.git", branch: "alt/decidim-lausa"
 gem "decidim-term_customizer", git: "https://github.com/mainio/decidim-module-term_customizer", branch: "0.24-stable"
+gem "decidim-verifications-simple_impersonation", git: "https://github.com/octree-gva/decidim-verifications-simple_impersonation", branch: "0.24-stable"
 
 gem "bootsnap", "~> 1.5", ">= 1.5.1"
 gem "puma", "~> 5.1", ">= 5.1.1"
 gem "uglifier", "~> 4.2.0"
 gem "rails", "~> 5.2.6"
 gem 'sidekiq', '~> 6.4', '>= 6.4.1'
-gem 'sidekiq-scheduler', '~> 3.1.1'
+gem 'sidekiq-scheduler', "~> 3.2.2"
 gem "hiredis", '~> 0.6.3'
 gem "redis", ">= 3.2.0"
 gem 'rack-attack', "~> 6.0"
